@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Dto\" />
+    <None Remove="Dto\Request\" />
+    <None Remove="Dto\Response\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Dto\" />
+    <Folder Include="Dto\Request\" />
+    <Folder Include="Dto\Response\" />
+  </ItemGroup>
+</Project>

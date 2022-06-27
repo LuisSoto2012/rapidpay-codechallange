@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="CardManagement\" />
+    <None Remove="UserAuthentication\" />
+    <None Remove="PaymentFee\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="CardManagement\" />
+    <Folder Include="UserAuthentication\" />
+    <Folder Include="PaymentFee\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RapidPay.Domain\RapidPay.Domain.csproj" />
+    <ProjectReference Include="..\RapidPay.Data\RapidPay.Data.csproj" />
+  </ItemGroup>
+</Project>
