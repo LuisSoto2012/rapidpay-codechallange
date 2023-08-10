@@ -28,7 +28,11 @@ $ dotnet build
 $ dotnet run --project src/RapidPay.ServiceHost/RapidPay.ServiceHost.csproj
 ```
 
-Add your string connection in appsettings
-User credentials for authentication
-username: dummy
-password: dummy
+## Notes
+
+Add your string connection in appsettings.json
+
+User credentials for authentication:
+
+- Username: dummy
+- Password: dummy
