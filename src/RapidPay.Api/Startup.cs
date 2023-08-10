@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -12,16 +14,19 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using RapidPay.Api.Handlers;
+using RapidPay.Api.Helpers;
 using RapidPay.Data;
 using RapidPay.Data.Mapping;
 using RapidPay.Data.Repositories;
-using RapidPay.ServiceHost.Handlers;
+using RapidPay.Domain.Dto;
 using RapidPay.Services.CardManagement;
 using RapidPay.Services.PaymentFee;
 using RapidPay.Services.UserAuthentication;
 
-namespace RapidPay.ServiceHost
+namespace RapidPay.Api
 {
     public class Startup
     {
@@ -38,36 +43,71 @@ namespace RapidPay.ServiceHost
             services.AddControllers();
 
             // Basic authentication config
-            services.AddAuthentication("BasicAuthentication")
-                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+            // services.AddAuthentication("BasicAuthentication")
+            //     .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+            
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = Configuration["Jwt:Issuer"],
+                    RequireExpirationTime = false,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                };
+            });
 
             //Swagger config with Basic Authentication
             services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "RapidPay", Version = "v1" });
 
-                options.AddSecurityDefinition("basicAuthentication",
-                    new OpenApiSecurityScheme
-                    {
-                        Name = "Authorization",
-                        Type = SecuritySchemeType.Http,
-                        Description = "Basic Authorization header using the username:password base64 encoded. Example: \"basic {username:password}\"",
-                        Scheme = "basic",
-                        In = ParameterLocation.Header
-                    });
-
-                options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "basicAuthentication" }
-                        }, new string[]{ }
-                    }
+                //BASIC AUTHENTICATION
+                // options.AddSecurityDefinition("basicAuthentication",
+                //     new OpenApiSecurityScheme
+                //     {
+                //         Name = "Authorization",
+                //         Type = SecuritySchemeType.Http,
+                //         Description = "Basic Authorization header using the username:password base64 encoded. Example: \"basic {username:password}\"",
+                //         Scheme = "basic",
+                //         In = ParameterLocation.Header
+                //     });
+                //
+                // options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                // {
+                //     {
+                //         new OpenApiSecurityScheme
+                //         {
+                //             Reference = new OpenApiReference {
+                //                 Type = ReferenceType.SecurityScheme,
+                //                 Id = "basicAuthentication" }
+                //         }, new string[]{ }
+                //     }
+                // });
+                
+                //JWT
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme {
+                    In = ParameterLocation.Header, 
+                    Description = "Please insert JWT with Bearer into field",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey 
                 });
-
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                    { 
+                        new OpenApiSecurityScheme 
+                        { 
+                            Reference = new OpenApiReference 
+                            { 
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer" 
+                            } 
+                        },
+                        new string[] { } 
+                    } 
+                });
             });
 
             //Database config
@@ -108,6 +148,9 @@ namespace RapidPay.ServiceHost
             app.UseAuthentication();
 
             app.UseAuthorization();
+            
+            // custom jwt auth middleware
+            app.UseMiddleware<JwtMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

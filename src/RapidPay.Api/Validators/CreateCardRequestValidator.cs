@@ -1,7 +1,7 @@
 using FluentValidation;
 using RapidPay.Domain.Dto.Request;
 
-namespace RapidPay.ServiceHost.Validators
+namespace RapidPay.Api.Validators
 {
     public class CreateCardRequestValidator : AbstractValidator<CreateCardRequest>
     {

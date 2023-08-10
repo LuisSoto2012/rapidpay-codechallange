@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace RapidPay.ServiceHost.Extensions
+namespace RapidPay.Api.Extensions
 {
 	public static class HostExtensions
 	{

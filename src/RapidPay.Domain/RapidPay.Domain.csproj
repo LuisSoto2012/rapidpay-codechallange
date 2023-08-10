@@ -9,7 +9,4 @@
     <None Remove="Dto\Request\" />
     <None Remove="Dto\Response\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Dto\" />
-  </ItemGroup>
 </Project>

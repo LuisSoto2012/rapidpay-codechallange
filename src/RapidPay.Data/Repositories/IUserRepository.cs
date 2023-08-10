@@ -7,6 +7,7 @@ namespace RapidPay.Data.Repositories
 	public interface IUserRepository
 	{
         public Task<User> Authenticate(string username, string password);
-    }
+        public Task<User> GetById(int id);
+	}
 }
 

@@ -10,9 +10,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RapidPay.Domain;
+using RapidPay.Domain.Dto.Response;
 using RapidPay.Services.UserAuthentication;
 
-namespace RapidPay.ServiceHost.Handlers
+namespace RapidPay.Api.Handlers
 {
 	public class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {

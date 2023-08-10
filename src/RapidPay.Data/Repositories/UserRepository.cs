@@ -25,6 +25,18 @@ namespace RapidPay.Data.Repositories
             user.Password = null;
             return user;
         }
+
+        public async Task<User> GetById(int id)
+        {
+            var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            if (user == null)
+            {
+                return null;
+            }
+
+            user.Password = null;
+            return user;
+        }
     }
 }
 

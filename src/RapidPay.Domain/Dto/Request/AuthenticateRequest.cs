@@ -1,10 +1,15 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+
 namespace RapidPay.Domain.Dto.Request
 {
 	public class AuthenticateRequest
 	{
-        public string Username { get; set; }
-        public string Password { get; set; }
+		[Required]
+		public string Username { get; set; }
+
+		[Required]
+		public string Password { get; set; }
     }
 }
 

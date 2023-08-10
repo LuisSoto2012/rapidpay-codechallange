@@ -8,9 +8,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RapidPay.Data;
-using RapidPay.ServiceHost.Extensions;
+using RapidPay.Api.Extensions;
 
-namespace RapidPay.ServiceHost
+namespace RapidPay.Api
 {
     public class Program
     {
