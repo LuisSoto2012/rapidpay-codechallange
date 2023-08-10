@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +29,22 @@ namespace RapidPay.Data.Repositories
                 _context.Add(newCard);
                 await _context.SaveChangesAsync();
                 return new CreateCardResponse() { CardId = newCard.Id, CardNumber = newCard.Number };
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return null;
+            }
+        }
+
+        public async Task<IEnumerable<Card>> GetAllCards()
+        {
+            try
+            {
+                var cards = await _context.Cards.ToListAsync();
+                if (!cards.Any())
+                    return null;
+                return cards;
             }
             catch (Exception ex)
             {

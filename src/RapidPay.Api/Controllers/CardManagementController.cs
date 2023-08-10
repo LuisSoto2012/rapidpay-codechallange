@@ -60,6 +60,40 @@ namespace RapidPay.ServiceHost.Controllers
             }
 
         }
+        
+        /// <summary>
+        /// GET: List all cards
+        /// </summary>
+        /// <returns>Created Cards in database with Number and Balance</returns>
+        [HttpPost("list-cards")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<IEnumerable<ListCardResponse>>> ListCardsAsync()
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                var cards = await _cardManagementService.ListCardsAsync();
+                if (cards == null)
+                {
+                    return NotFound(new { message = "Created cards do not exist" });
+                }
+
+                return Ok(cards);
+            }
+            catch (System.Exception ex)
+            {
+                var logError = $"Error when list all cards in database. Error message: {ex.Message}";
+                _logger.LogError(logError, ex);
+                return this.StatusCode(StatusCodes.Status500InternalServerError, logError);
+            }
+
+        }
 
         /// <summary>
         /// PUT: Execute a payment using a given card number and the payment

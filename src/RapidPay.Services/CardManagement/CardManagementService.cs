@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using RapidPay.Data.Repositories;
@@ -38,15 +40,37 @@ namespace RapidPay.Services.CardManagement
             
         }
 
-        public async Task<CardBalanceResponse> GetCardBalance(string cardNumber)
+        public async Task<IEnumerable<ListCardResponse>> ListCardsAsync()
         {
-            decimal? balance = await _cardRepository.GetCardBalance(cardNumber);
-            if (!balance.HasValue)
+            try
             {
+                var cards = await _cardRepository.GetAllCards();
+                return cards.Select(c => new ListCardResponse {CardNumber = c.Number, Balance = c.Balance});
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error getting cards. Exception: {ex}");
                 return null;
             }
+        }
 
-            return new CardBalanceResponse { Balance = balance.Value, CardNumber = cardNumber };
+        public async Task<CardBalanceResponse> GetCardBalance(string cardNumber)
+        {
+            try
+            {
+                decimal? balance = await _cardRepository.GetCardBalance(cardNumber);
+                if (!balance.HasValue)
+                {
+                    return null;
+                }
+
+                return new CardBalanceResponse { Balance = balance.Value, CardNumber = cardNumber };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error getting card balance for {cardNumber}. Exception: {ex}");
+                return null;
+            }
         }
 
         public async Task<CardPaymentResponse> ProcessPayment(DoPaymentRequest request)

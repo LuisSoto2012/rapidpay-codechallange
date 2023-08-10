@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{524E5B0A-1507-498D-8592-36363400D950}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RapidPay.ServiceHost", "src\RapidPay.ServiceHost\RapidPay.ServiceHost.csproj", "{9C31D55C-D93D-4806-B710-3DCA33A73E2A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RapidPay.Api", "src\RapidPay.Api\RapidPay.Api.csproj", "{9C31D55C-D93D-4806-B710-3DCA33A73E2A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RapidPay.Domain", "src\RapidPay.Domain\RapidPay.Domain.csproj", "{F24DA13E-DBB2-4915-AE00-AA173F168254}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RapidPay.Data", "src\RapidPay.Data\RapidPay.Data.csproj", "{0137D27B-2EFA-4832-871A-1541C4EE3BA6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RapidPay.Services", "src\RapidPay.Services\RapidPay.Services.csproj", "{0D7179E9-DF90-48D1-B620-FA2E51E9113D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RapidPay.Test", "src\RapidPay.Test\RapidPay.Test.csproj", "{97E33191-889E-47A4-9112-45D194A19A72}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,7 @@ Global
 		{F24DA13E-DBB2-4915-AE00-AA173F168254} = {524E5B0A-1507-498D-8592-36363400D950}
 		{0137D27B-2EFA-4832-871A-1541C4EE3BA6} = {524E5B0A-1507-498D-8592-36363400D950}
 		{0D7179E9-DF90-48D1-B620-FA2E51E9113D} = {524E5B0A-1507-498D-8592-36363400D950}
+		{97E33191-889E-47A4-9112-45D194A19A72} = {524E5B0A-1507-498D-8592-36363400D950}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{9C31D55C-D93D-4806-B710-3DCA33A73E2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -39,5 +42,9 @@ Global
 		{0D7179E9-DF90-48D1-B620-FA2E51E9113D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D7179E9-DF90-48D1-B620-FA2E51E9113D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D7179E9-DF90-48D1-B620-FA2E51E9113D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97E33191-889E-47A4-9112-45D194A19A72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97E33191-889E-47A4-9112-45D194A19A72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97E33191-889E-47A4-9112-45D194A19A72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97E33191-889E-47A4-9112-45D194A19A72}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
