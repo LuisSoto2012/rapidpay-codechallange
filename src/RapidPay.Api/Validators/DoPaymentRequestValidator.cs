@@ -3,19 +3,19 @@ using RapidPay.Domain.Dto.Request;
 
 namespace RapidPay.Api.Validators
 {
-    public class CreateCardRequestValidator : AbstractValidator<CreateCardRequest>
+    public class DoPaymentRequestValidator : AbstractValidator<DoPaymentRequest>
     {
-        public CreateCardRequestValidator()
+        public DoPaymentRequestValidator()
         {
-            RuleFor(x => x.Number)
+            RuleFor(x => x.CardNumber)
                 .NotNull().WithMessage("Number is required")
                 .NotEmpty().WithMessage("Number is required")
                 .Matches("^[0-9]*$").WithMessage("Only numeric characters are allowed.")
                 .Length(15).WithMessage("Number must have exactly 15 digits");
-
-            RuleFor(x => x.Balance)
-                .GreaterThan(0).WithMessage("Balance should be greater than zero");
-
+            
+            RuleFor(x => x.Amount)
+                .GreaterThan(0).WithMessage("Amount should be greater than zero");
+            
             RuleFor(x => x.IdentificationNumber)
                 .NotNull().WithMessage("IdentificationNumber is required")
                 .NotEmpty().WithMessage("IdentificationNumber is required");

@@ -45,7 +45,7 @@ namespace RapidPay.Services.CardManagement
             try
             {
                 var cards = await _cardRepository.GetAllCards();
-                return cards.Select(c => new ListCardResponse {CardNumber = c.Number, Balance = c.Balance});
+                return cards.Select(c => new ListCardResponse { CardNumber = c.Number, Balance = c.Balance, IdentificationNumber = c.IdentificationNumber });
             }
             catch (Exception ex)
             {

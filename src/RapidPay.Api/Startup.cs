@@ -4,6 +4,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -18,10 +20,13 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RapidPay.Api.Handlers;
 using RapidPay.Api.Helpers;
+using RapidPay.Api.Validators;
+using RapidPay.Api.Validators.Factory;
 using RapidPay.Data;
 using RapidPay.Data.Mapping;
 using RapidPay.Data.Repositories;
 using RapidPay.Domain.Dto;
+using RapidPay.Domain.Dto.Request;
 using RapidPay.Services.CardManagement;
 using RapidPay.Services.PaymentFee;
 using RapidPay.Services.UserAuthentication;
@@ -41,6 +46,8 @@ namespace RapidPay.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            
+            services.AddFluentValidationAutoValidation();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
@@ -99,6 +106,11 @@ namespace RapidPay.Api
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPaymentFeeRepository, PaymentFeeRepository>();
             services.AddSingleton<IUFEService, UFEService>();
+            
+            services.AddSingleton<IRequestValidatorFactory, RequestValidatorFactory>();
+            // Register your individual validators
+            services.AddTransient<IValidator<CreateCardRequest>, CreateCardRequestValidator>();
+            services.AddTransient<IValidator<DoPaymentRequest>, DoPaymentRequestValidator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using RapidPay.Api.Validators;
+using RapidPay.Api.Validators.Factory;
 using RapidPay.Domain.Dto.Request;
 using RapidPay.Domain.Dto.Response;
 using RapidPay.Services.CardManagement;
@@ -23,13 +26,16 @@ namespace RapidPay.Api.Controllers
     {
         private readonly ICardManagementService _cardManagementService;
         private readonly ILogger<CardManagementController> _logger;
+        private readonly IRequestValidatorFactory _validatorFactory;
 
         public CardManagementController(
             ICardManagementService cardManagementService,
-            ILogger<CardManagementController> logger)
+            ILogger<CardManagementController> logger,
+            IRequestValidatorFactory validatorFactory)
         {
             _cardManagementService = cardManagementService;
             _logger = logger;
+            _validatorFactory = validatorFactory;
         }
 
         /// <summary>
@@ -49,6 +55,14 @@ namespace RapidPay.Api.Controllers
             }
             try
             {
+                var validator = _validatorFactory.GetValidator<CreateCardRequest>();
+                var validationResult = await validator.ValidateAsync(request);
+
+                if (!validationResult.IsValid)
+                {
+                    return BadRequest(validationResult.Errors);
+                }
+                
                 var response = await _cardManagementService.CreateNewCard(request);
                 return CreatedAtAction("GetsCardBalance", new { cardNumber = response.CardNumber, identificationNumber = response.IdentificationNumber }, response);
             }
@@ -108,12 +122,12 @@ namespace RapidPay.Api.Controllers
             [FromBody] DoPaymentRequest paymentRequest
         )
         {
-            if (string.IsNullOrEmpty(paymentRequest.CardNumber) ||
-                paymentRequest.CardNumber.Length != 15 ||
-                paymentRequest.Amount <= 0 || string.IsNullOrEmpty(paymentRequest.IdentificationNumber)
-            )
+            var validator = _validatorFactory.GetValidator<DoPaymentRequest>();
+            var validationResult = await validator.ValidateAsync(paymentRequest);
+
+            if (!validationResult.IsValid)
             {
-                return BadRequest();
+                return BadRequest(validationResult.Errors);
             }
 
             CardPaymentResponse response;
