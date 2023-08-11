@@ -54,13 +54,21 @@ namespace RapidPay.Services.CardManagement
             }
         }
 
-        public async Task<CardBalanceResponse> GetCardBalance(string cardNumber)
+        public async Task<CardBalanceResponse> GetCardBalance(string cardNumber, string identificationNumber)
         {
             try
             {
+                //Validate if card belongs to user
+                if (!await _cardRepository.IsCardAssignedToUser(cardNumber, identificationNumber))
+                {
+                    _logger.LogError("Card is not assigned to that user");
+                    return null;
+                }
+                
                 decimal? balance = await _cardRepository.GetCardBalance(cardNumber);
                 if (!balance.HasValue)
                 {
+                    _logger.LogError("There's no balance in the card");
                     return null;
                 }
 
@@ -77,10 +85,10 @@ namespace RapidPay.Services.CardManagement
         {
             _logger.LogInformation(
                 $"Process a card payment card with number {request.CardNumber} and amount {request.Amount}");
-            var currentBalance = await GetCardBalance(request.CardNumber);
+
+            var currentBalance = await GetCardBalance(request.CardNumber, request.IdentificationNumber);
             if (currentBalance == null)
             {
-                _logger.LogError("There's no balance in the card");
                 return null;
             }
 
@@ -89,7 +97,7 @@ namespace RapidPay.Services.CardManagement
             var totalToBeDiscounted = request.Amount + feeToPay;
             if (currentBalance.Balance - totalToBeDiscounted < 0)
             {
-                _logger.LogError("There's not enough balance  to process this payment");
+                _logger.LogError("There's not enough balance to process this payment");
                 return null;
             }
 

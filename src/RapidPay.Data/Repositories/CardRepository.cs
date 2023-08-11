@@ -28,7 +28,7 @@ namespace RapidPay.Data.Repositories
                 var newCard = _mapper.Map<Card>(request);
                 _context.Add(newCard);
                 await _context.SaveChangesAsync();
-                return new CreateCardResponse() { CardId = newCard.Id, CardNumber = newCard.Number };
+                return new CreateCardResponse() { CardId = newCard.Id, CardNumber = newCard.Number, IdentificationNumber = newCard.IdentificationNumber };
             }
             catch (Exception ex)
             {
@@ -109,7 +109,21 @@ namespace RapidPay.Data.Repositories
                 return false;
             }     
             return true;
-        }   
+        }
+
+        public async Task<bool> IsCardAssignedToUser(string cardNumber, string identificationNumber)
+        {
+            try
+            {
+                return await _context.Cards.AnyAsync(c =>
+                    c.Number == cardNumber && c.IdentificationNumber == identificationNumber);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return false;
+            } 
+        }
     }
 }
 

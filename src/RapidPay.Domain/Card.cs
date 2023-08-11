@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata;
 using System.Text.RegularExpressions;
 
 namespace RapidPay.Domain
@@ -18,6 +19,10 @@ namespace RapidPay.Domain
         /// Card Balance
         /// </summary>
         public decimal Balance { get; set; }
+        /// <summary>
+        /// Person's identification number
+        /// </summary>
+        public string IdentificationNumber { get; set; }
         /// <summary>
         /// Card Payment Histories
         /// </summary>

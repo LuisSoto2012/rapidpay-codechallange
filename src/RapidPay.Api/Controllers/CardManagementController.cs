@@ -50,7 +50,7 @@ namespace RapidPay.Api.Controllers
             try
             {
                 var response = await _cardManagementService.CreateNewCard(request);
-                return CreatedAtAction("GetsCardBalance", new { cardNumber = response.CardNumber }, response);
+                return CreatedAtAction("GetsCardBalance", new { cardNumber = response.CardNumber, identificationNumber = response.IdentificationNumber }, response);
             }
             catch (System.Exception ex)
             {
@@ -110,7 +110,7 @@ namespace RapidPay.Api.Controllers
         {
             if (string.IsNullOrEmpty(paymentRequest.CardNumber) ||
                 paymentRequest.CardNumber.Length != 15 ||
-                paymentRequest.Amount <= 0
+                paymentRequest.Amount <= 0 || string.IsNullOrEmpty(paymentRequest.IdentificationNumber)
             )
             {
                 return BadRequest();
@@ -138,23 +138,24 @@ namespace RapidPay.Api.Controllers
         /// GET: Gets Card Balance
         /// </summary>
         /// <param name="cardNumber">15 digits card number</param>
+        /// <param name="identificationNumber">person's identification number</param>
         /// <returns>CardBalanceResponse</returns>
-        [HttpGet("card/{cardNumber}/balance")]
+        [HttpGet("card/{cardNumber}/{identificationNumber}/balance")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<CardBalanceResponse>> GetsCardBalance([FromRoute] string cardNumber)
+        public async Task<ActionResult<CardBalanceResponse>> GetsCardBalance([FromRoute] string cardNumber, [FromRoute] string identificationNumber)
         {
-            if (string.IsNullOrEmpty(cardNumber) || cardNumber.Length != 15)
+            if (string.IsNullOrEmpty(cardNumber) || cardNumber.Length != 15 || string.IsNullOrEmpty(identificationNumber))
             {
                 return BadRequest();
             }
             try
             {
-                var card = await _cardManagementService.GetCardBalance(cardNumber);
+                var card = await _cardManagementService.GetCardBalance(cardNumber, identificationNumber);
                 if (card == null)
                 {
-                    return NotFound(new { message = "Card with provided userName does not exist" });
+                    return NotFound(new { message = "Card with provided does not exist" });
                 }
 
                 return Ok(card);

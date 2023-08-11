@@ -10,7 +10,7 @@ namespace RapidPay.Api.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase 
     {
-        private IUserService _userService;
+        private readonly IUserService _userService;
         private readonly IConfiguration _configuration;
 
         public UserController(IUserService userService, IConfiguration configuration)

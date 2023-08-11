@@ -13,7 +13,8 @@ namespace RapidPay.Data.Repositories
         Task<IEnumerable<Card>> GetAllCards();
         Task<decimal?> GetCardBalance(string cardNumber);
         Task<bool> UpdateBalance(string cardNumber, decimal amount);
-        Task<bool> SaveCardPaymentTransaction(string cardNumber, decimal payment, decimal fee);        
-    }
+        Task<bool> SaveCardPaymentTransaction(string cardNumber, decimal payment, decimal fee);
+        Task<bool> IsCardAssignedToUser(string cardNumber, string identificationNumber);
+	}
 }
 

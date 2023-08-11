@@ -42,10 +42,6 @@ namespace RapidPay.Api
         {
             services.AddControllers();
 
-            // Basic authentication config
-            // services.AddAuthentication("BasicAuthentication")
-            //     .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
-            
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
@@ -65,29 +61,6 @@ namespace RapidPay.Api
             {
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "RapidPay", Version = "v1" });
 
-                //BASIC AUTHENTICATION
-                // options.AddSecurityDefinition("basicAuthentication",
-                //     new OpenApiSecurityScheme
-                //     {
-                //         Name = "Authorization",
-                //         Type = SecuritySchemeType.Http,
-                //         Description = "Basic Authorization header using the username:password base64 encoded. Example: \"basic {username:password}\"",
-                //         Scheme = "basic",
-                //         In = ParameterLocation.Header
-                //     });
-                //
-                // options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                // {
-                //     {
-                //         new OpenApiSecurityScheme
-                //         {
-                //             Reference = new OpenApiReference {
-                //                 Type = ReferenceType.SecurityScheme,
-                //                 Id = "basicAuthentication" }
-                //         }, new string[]{ }
-                //     }
-                // });
-                
                 //JWT
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme {
                     In = ParameterLocation.Header, 

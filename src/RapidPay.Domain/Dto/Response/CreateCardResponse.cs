@@ -5,6 +5,7 @@ namespace RapidPay.Domain.Dto.Response
 	{
         public int CardId { get; set; }
         public string CardNumber { get; set; }
+        public string IdentificationNumber { get; set; }
     }
 }
 
