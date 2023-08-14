@@ -124,6 +124,20 @@ namespace RapidPay.Data.Repositories
                 return false;
             } 
         }
+
+        public async Task<bool> IsCardDuplicated(string cardNumber)
+        {
+            try
+            {
+                return await _context.Cards.AnyAsync(c =>
+                    c.Number == cardNumber && c.Number == cardNumber);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return false;
+            } 
+        }
     }
 }
 

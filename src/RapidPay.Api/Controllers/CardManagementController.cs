@@ -64,7 +64,15 @@ namespace RapidPay.Api.Controllers
                 }
                 
                 var response = await _cardManagementService.CreateNewCard(request);
-                return CreatedAtAction("GetsCardBalance", new { cardNumber = response.CardNumber, identificationNumber = response.IdentificationNumber }, response);
+
+                if (response != null)
+                    return CreatedAtAction("GetsCardBalance",
+                        new {cardNumber = response.CardNumber, identificationNumber = response.IdentificationNumber},
+                        response);
+                var logError = $"Error when creating new card with number: {request.Number}";
+                _logger.LogError(logError);
+                return this.StatusCode(StatusCodes.Status500InternalServerError, logError);
+
             }
             catch (System.Exception ex)
             {

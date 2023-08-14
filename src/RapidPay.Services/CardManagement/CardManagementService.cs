@@ -29,12 +29,20 @@ namespace RapidPay.Services.CardManagement
         {
             try
             {
+                
+                //Validate if card number already exists in database
+                if (await _cardRepository.IsCardDuplicated(request.Number))
+                {
+                    _logger.LogError($"Card {request.Number} already exists in database.");
+                    return null;
+                }
+                
                 _logger.LogInformation($"Create new card with number {request.Number}");
                 return await _cardRepository.CreateNewCard(request);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error creating new card with numer {request.Number}. Exception: {ex}");
+                _logger.LogError($"Error creating new card with number {request.Number}. Exception: {ex}");
                 return null;
             }
             

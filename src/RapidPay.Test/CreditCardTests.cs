@@ -1,7 +1,14 @@
 using System;
+using System.Threading.Tasks;
 using Bogus;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
+using Moq;
+using RapidPay.Data.Repositories;
 using RapidPay.Domain;
+using RapidPay.Domain.Dto.Request;
+using RapidPay.Services.CardManagement;
+using RapidPay.Services.PaymentFee;
 using Xunit;
 
 namespace RapidPay.Test

@@ -15,6 +15,7 @@ namespace RapidPay.Data.Repositories
         Task<bool> UpdateBalance(string cardNumber, decimal amount);
         Task<bool> SaveCardPaymentTransaction(string cardNumber, decimal payment, decimal fee);
         Task<bool> IsCardAssignedToUser(string cardNumber, string identificationNumber);
+        Task<bool> IsCardDuplicated(string cardNumber);
 	}
 }
 
